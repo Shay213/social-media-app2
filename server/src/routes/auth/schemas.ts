@@ -89,7 +89,6 @@ const { password, ...loginSchemaProperties } = userSchemaProperties;
 const loginSchemaSuccessReply = {
   type: "object",
   properties: {
-    token: { type: "string" },
     user: {
       type: "object",
       properties: loginSchemaProperties,
@@ -108,7 +107,7 @@ const loginSchemaSuccessReply = {
       ],
     },
   },
-  required: ["token", "user"],
+  required: ["user"],
   additionalProperties: false,
 };
 

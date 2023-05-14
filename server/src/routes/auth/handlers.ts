@@ -37,7 +37,14 @@ export const login: RouteHandler<{ Body: LoginBody }> = async (req, reply) => {
 
     const { password: uPassword, ...rest } = user;
     const token = req.server.jwt.sign({ id: user.id });
-    return reply.code(200).send({ token, user: rest });
+
+    return reply
+      .setCookie("token", token, {
+        path: "/",
+        httpOnly: true,
+      })
+      .code(200)
+      .send({ user });
   } catch (error: any) {
     return req.server.handleErr(reply, error.message, 500);
   }

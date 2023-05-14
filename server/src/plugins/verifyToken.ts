@@ -11,20 +11,16 @@ declare module "fastify" {
 }
 
 const verifyToken: FastifyPluginAsync = fp(async (fastify, options) => {
-  fastify.register(users, { prefix: "/api/users" });
+  fastify.register(function verifiedRoutes(childFastify, opts, done) {
+    childFastify.register(users, { prefix: "/api/users" });
 
-  fastify.addHook("onRequest", (req, reply, done) => {
-    const { authorization } = req.headers;
-    if (!authorization)
-      return req.server.handleErr(reply, "Access denied!", 403);
-
-    let token = "";
-    if (authorization.startsWith("Bearer ")) {
-      token = authorization.slice(7, authorization.length).trimStart();
-    }
-
-    const verified = req.server.jwt.verify(token);
-    req.payload = verified;
+    childFastify.addHook("onRequest", (req, reply, done) => {
+      const token = req.cookies.token;
+      if (!token) return req.server.handleErr(reply, "Not authenticated!", 400);
+      const verified = req.server.jwt.verify(token);
+      req.payload = verified;
+      done();
+    });
     done();
   });
 });

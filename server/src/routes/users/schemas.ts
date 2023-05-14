@@ -10,17 +10,19 @@ const getUserSuccessReply = {
   additionalProperties: false,
 };
 
-const getUserQuery = {
+const getUserParams = {
   type: "object",
   properties: {
     id: { type: "string" },
   },
   required: ["id"],
-};
+} as const;
+
+export type getUserParams = FromSchema<typeof getUserParams>;
 
 export const getUserSchema: FastifySchema = {
-  querystring: {
-    ...getUserQuery,
+  params: {
+    ...getUserParams,
   },
   response: {
     200: {
@@ -29,3 +31,7 @@ export const getUserSchema: FastifySchema = {
     500: { $ref: "error#" },
   },
 };
+
+export const getUserFriendsSchema: FastifySchema = {};
+
+export const addRemoveFriendSchema: FastifySchema = {};

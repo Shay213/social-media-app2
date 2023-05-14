@@ -12,29 +12,31 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const pluginCallback: FastifyPluginCallback = (fastify, options, done) => {
-  fastify.register(fastifyStatic, {
-    root: path.join(__dirname, "public/assets"),
-  });
-  //FILE STORAGE
-  const storage = multer.diskStorage({
-    destination: function (req, file, cb) {
-      cb(null, "public/assets");
-    },
-    filename: function (req, file, cb) {
-      cb(null, file.originalname);
-    },
-  });
+  fastify.register(function filesRoutes(childFastify, opts, done) {
+    childFastify.register(fastifyStatic, {
+      root: path.join(__dirname, "public/assets"),
+    });
+    //FILE STORAGE
+    const storage = multer.diskStorage({
+      destination: function (req, file, cb) {
+        cb(null, "public/assets");
+      },
+      filename: function (req, file, cb) {
+        cb(null, file.originalname);
+      },
+    });
 
-  const upload = multer({ storage });
+    const upload = multer({ storage });
 
-  fastify.addHook("preHandler", (req, reply, done) => {
-    // upload.single("file");
-    console.log("uploading file ....");
+    childFastify.addHook("preHandler", (req, reply, done) => {
+      // upload.single("file");
+      console.log("uploading file ....");
+      done();
+    });
+
+    childFastify.register(auth, { prefix: "/api/auth" });
     done();
   });
-
-  fastify.register(auth, { prefix: "/api/auth" });
-
   done();
 };
 

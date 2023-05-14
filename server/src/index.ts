@@ -3,6 +3,7 @@ import Fastify from "fastify";
 import fastifyCors from "@fastify/cors";
 import fastifyHelmet from "@fastify/helmet";
 import fastifyJwt from "@fastify/jwt";
+import fastifyCookie from "@fastify/cookie";
 
 // CUSTOM PLUGINS
 import prismaPlugin from "./plugins/prisma";
@@ -25,7 +26,11 @@ fastify.register(fastifyHelmet, {
   crossOriginResourcePolicy: { policy: "cross-origin" },
 });
 fastify.register(prismaPlugin);
-fastify.register(fastifyJwt, { secret: getJwtSecret() });
+fastify.register(fastifyCookie);
+fastify.register(fastifyJwt, {
+  secret: getJwtSecret(),
+  cookie: { cookieName: "token", signed: false },
+});
 fastify.register(handleErr);
 
 // GLOBAL SCHEMAS
