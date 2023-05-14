@@ -7,6 +7,7 @@ import fastifyJwt from "@fastify/jwt";
 // CUSTOM PLUGINS
 import prismaPlugin from "./plugins/prisma";
 import handleErr from "./plugins/handleErr.ts";
+import verifyToken from "./plugins/verifyToken.ts";
 
 // ROUTES WITH FILES
 import upload from "./plugins/upload";
@@ -25,6 +26,7 @@ fastify.register(fastifyHelmet, {
 fastify.register(prismaPlugin);
 fastify.register(fastifyJwt, { secret: getJwtSecret() });
 fastify.register(handleErr);
+fastify.register(verifyToken);
 
 // ROUTES WITH FILES
 fastify.register(upload);
