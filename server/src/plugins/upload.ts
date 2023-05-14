@@ -1,5 +1,5 @@
 import fp from "fastify-plugin";
-import { FastifyPluginCallback, FastifyReply, FastifyRequest } from "fastify";
+import { FastifyPluginCallback } from "fastify";
 import path from "path";
 import { fileURLToPath } from "url";
 import fastifyStatic from "@fastify/static";
@@ -7,12 +7,6 @@ import multer from "fastify-multer";
 
 // routes
 import auth from "../routes/auth/index.ts";
-
-declare module "fastify" {
-  interface FastifyInstance {
-    uploadFile: (req: FastifyRequest, reply: FastifyReply) => Promise<void>;
-  }
-}
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);

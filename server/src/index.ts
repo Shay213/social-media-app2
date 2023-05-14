@@ -1,14 +1,17 @@
 import * as dotenv from "dotenv";
 import Fastify from "fastify";
-import prismaPlugin from "./plugins/prisma";
 import fastifyCors from "@fastify/cors";
 import fastifyHelmet from "@fastify/helmet";
 import fastifyJwt from "@fastify/jwt";
 
-// routes
+// CUSTOM PLUGINS
+import prismaPlugin from "./plugins/prisma";
+import handleErr from "./plugins/handleErr.ts";
+
+// ROUTES WITH FILES
 import upload from "./plugins/upload";
 
-// utils
+// UTILS
 import getJwtSecret from "./utils/getJwtSecret.ts";
 
 dotenv.config();
@@ -21,8 +24,9 @@ fastify.register(fastifyHelmet, {
 });
 fastify.register(prismaPlugin);
 fastify.register(fastifyJwt, { secret: getJwtSecret() });
+fastify.register(handleErr);
 
-// routes
+// ROUTES WITH FILES
 fastify.register(upload);
 
 (async () => {

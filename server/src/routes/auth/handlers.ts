@@ -1,37 +1,44 @@
 import bycrypt from "bcrypt";
 import { RouteHandler } from "fastify";
-import type { Body } from "./schemas.ts";
+import type { RegisterBody, LoginBody } from "./schemas.ts";
 
-export const register: RouteHandler<{ Body: Body }> = async (req, reply) => {
-  const {
-    firstName,
-    lastName,
-    email,
-    password,
-    picturePath,
-    location,
-    occupation,
-  } = req.body;
-
+export const register: RouteHandler<{ Body: RegisterBody }> = async (
+  req,
+  reply
+) => {
   try {
     const salt = await bycrypt.genSalt();
-    const passwordHash = await bycrypt.hash(password, salt);
+    const passwordHash = await bycrypt.hash(req.body.password, salt);
     const user = await req.server.prisma.user.create({
       data: {
-        firstName,
-        lastName,
-        email,
+        ...req.body,
         password: passwordHash,
-        picturePath,
-        location,
-        occupation,
         viewedProfile: Math.floor(Math.random() * 10000),
         impressions: Math.floor(Math.random() * 10000),
       },
     });
-    reply.code(201).send({ user: user });
-  } catch (error) {
-    const e = error as Error;
-    reply.code(500).send({ message: e.message, status: 500 });
+    return reply.code(201).send({ user: user });
+  } catch (error: any) {
+    return req.server.handleErr(reply, error.message, 500);
+  }
+};
+
+export const login: RouteHandler<{ Body: LoginBody }> = async (req, reply) => {
+  const { email, password } = req.body;
+  try {
+    const user = await req.server.prisma.user.findUnique({
+      where: { email },
+    });
+    if (!user) return req.server.handleErr(reply, "User does not exist!", 400);
+
+    const isMatch = await bycrypt.compare(password, user.password);
+    if (!isMatch)
+      return req.server.handleErr(reply, "Invalid credentials.", 400);
+
+    const { password: uPassword, ...rest } = user;
+    const token = req.server.jwt.sign({ id: user.id });
+    return reply.code(200).send({ token, user: rest });
+  } catch (error: any) {
+    return req.server.handleErr(reply, error.message, 500);
   }
 };
