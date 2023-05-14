@@ -5,6 +5,9 @@ import { fileURLToPath } from "url";
 import fastifyStatic from "@fastify/static";
 import multer from "fastify-multer";
 
+// routes
+import auth from "../routes/auth/index.ts";
+
 declare module "fastify" {
   interface FastifyInstance {
     uploadFile: (req: FastifyRequest, reply: FastifyReply) => Promise<void>;
@@ -14,7 +17,7 @@ declare module "fastify" {
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-const pluginCallback: FastifyPluginCallback = (fastify, options, next) => {
+const pluginCallback: FastifyPluginCallback = (fastify, options, done) => {
   fastify.register(fastifyStatic, {
     root: path.join(__dirname, "public/assets"),
   });
@@ -30,13 +33,15 @@ const pluginCallback: FastifyPluginCallback = (fastify, options, next) => {
 
   const upload = multer({ storage });
 
-  const uploadFile = async (req: FastifyRequest, reply: FastifyReply) => {
-    upload.single("file");
-  };
+  fastify.addHook("preHandler", (req, reply, done) => {
+    // upload.single("file");
+    console.log("uploading file ....");
+    done();
+  });
 
-  fastify.decorate("uploadFile", uploadFile);
+  fastify.register(auth, { prefix: "/api/auth" });
 
-  next();
+  done();
 };
 
 export default fp(pluginCallback);

@@ -1,5 +1,8 @@
 import { FastifyInstance } from "fastify";
+import { register } from "./handlers.ts";
+import { registerSchema, userSchema } from "./schemas.ts";
 
 export default async (fastify: FastifyInstance) => {
-  //fastify.post("/register", { preHandler: fastify.uploadFile }, handler);
+  fastify.addSchema(userSchema);
+  fastify.post("/register", { schema: registerSchema }, register);
 };

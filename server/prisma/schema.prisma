@@ -18,12 +18,12 @@ model User {
   password      String
   picturePath   String?   @default("") @map("picture_path")
   friends       Friend[]
-  location      String?
-  occupation    String?
-  viewedProfile Int?      @map("viewed_profile")
-  impressions   Int?
-  updatedAt     DateTime? @default(now())
-  createdAt     DateTime? @default(now())
+  location      String?   @default("")
+  occupation    String?   @default("")
+  viewedProfile Int?      @default(0)
+  impressions   Int?      @default(0)
+  updatedAt     DateTime? @updatedAt
+  createdAt     DateTime? @default(now()) @map("created_at")
 
   @@map("users")
 }
@@ -32,8 +32,8 @@ model Friend {
   id         String  @id @default(uuid())
   firstName  String  @map("first_name")
   lastName   String  @map("last_name")
-  occupation String?
-  location   String?
+  occupation String? @default("")
+  location   String? @default("")
   userId     String  @map("user_id")
   user       User    @relation(fields: [userId], references: [id])
 

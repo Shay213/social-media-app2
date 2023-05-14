@@ -3,10 +3,13 @@ import Fastify from "fastify";
 import prismaPlugin from "./plugins/prisma";
 import fastifyCors from "@fastify/cors";
 import fastifyHelmet from "@fastify/helmet";
-import upload from "./plugins/upload";
+import fastifyJwt from "@fastify/jwt";
 
 // routes
-import registerAuth from "./routes/auth/index.ts";
+import upload from "./plugins/upload";
+
+// utils
+import getJwtSecret from "./utils/getJwtSecret.ts";
 
 dotenv.config();
 
@@ -17,10 +20,10 @@ fastify.register(fastifyHelmet, {
   crossOriginResourcePolicy: { policy: "cross-origin" },
 });
 fastify.register(prismaPlugin);
-fastify.register(upload);
+fastify.register(fastifyJwt, { secret: getJwtSecret() });
 
 // routes
-fastify.register(registerAuth, { prefix: "/auth" });
+fastify.register(upload);
 
 (async () => {
   try {
