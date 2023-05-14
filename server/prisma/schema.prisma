@@ -17,7 +17,7 @@ model User {
   email         String    @unique
   password      String
   picturePath   String?   @default("") @map("picture_path")
-  friends       Friend[]  @default([])
+  friends       Friend[]
   location      String?
   occupation    String?
   viewedProfile Int?      @map("viewed_profile")
@@ -26,4 +26,16 @@ model User {
   createdAt     DateTime? @default(now())
 
   @@map("users")
+}
+
+model Friend {
+  id         String  @id @default(uuid())
+  firstName  String  @map("first_name")
+  lastName   String  @map("last_name")
+  occupation String?
+  location   String?
+  userId     String  @map("user_id")
+  user       User    @relation(fields: [userId], references: [id])
+
+  @@map("friends")
 }
