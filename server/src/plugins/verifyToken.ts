@@ -1,6 +1,9 @@
 import fp from "fastify-plugin";
 import { FastifyPluginAsync } from "fastify";
 
+// routes
+import users from "../routes/users";
+
 declare module "fastify" {
   interface FastifyRequest {
     payload: any;
@@ -8,6 +11,8 @@ declare module "fastify" {
 }
 
 const verifyToken: FastifyPluginAsync = fp(async (fastify, options) => {
+  fastify.register(users, { prefix: "/api/users" });
+
   fastify.addHook("onRequest", (req, reply, done) => {
     const { authorization } = req.headers;
     if (!authorization)

@@ -8,12 +8,13 @@ import fastifyJwt from "@fastify/jwt";
 import prismaPlugin from "./plugins/prisma";
 import handleErr from "./plugins/handleErr.ts";
 import verifyToken from "./plugins/verifyToken.ts";
-
-// ROUTES WITH FILES
 import upload from "./plugins/upload";
 
 // UTILS
 import getJwtSecret from "./utils/getJwtSecret.ts";
+
+// GLOBAL SCHEMAS
+import { userSchema, errorReplySchema } from "./routes/auth/schemas.ts";
 
 dotenv.config();
 
@@ -26,10 +27,16 @@ fastify.register(fastifyHelmet, {
 fastify.register(prismaPlugin);
 fastify.register(fastifyJwt, { secret: getJwtSecret() });
 fastify.register(handleErr);
-fastify.register(verifyToken);
+
+// GLOBAL SCHEMAS
+fastify.addSchema(userSchema);
+fastify.addSchema(errorReplySchema);
 
 // ROUTES WITH FILES
 fastify.register(upload);
+
+// ROUTES WITH TOKEN VERIFICATION
+fastify.register(verifyToken);
 
 (async () => {
   try {

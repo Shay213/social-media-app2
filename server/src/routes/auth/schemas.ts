@@ -61,7 +61,8 @@ const registerSchemaSuccessReply = {
   additionalProperties: false,
 };
 
-const errorReplySchema = {
+export const errorReplySchema = {
+  $id: "error",
   type: "object",
   properties: {
     message: { type: "string" },
