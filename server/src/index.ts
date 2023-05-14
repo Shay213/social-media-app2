@@ -2,14 +2,12 @@ import * as dotenv from "dotenv";
 import Fastify from "fastify";
 import prismaPlugin from "./plugins/prisma";
 import fastifyCors from "@fastify/cors";
-import multer from "fastify-multer";
 import fastifyHelmet from "@fastify/helmet";
-import fastifyStatic from "@fastify/static";
-import path from "path";
-import { fileURLToPath } from "url";
+import upload from "./plugins/upload";
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+// routes
+import registerAuth from "./routes/auth/index.ts";
+
 dotenv.config();
 
 const fastify = Fastify({ logger: true });
@@ -19,21 +17,10 @@ fastify.register(fastifyHelmet, {
   crossOriginResourcePolicy: { policy: "cross-origin" },
 });
 fastify.register(prismaPlugin);
-fastify.register(fastifyStatic, {
-  root: path.join(__dirname, "public/assets"),
-});
+fastify.register(upload);
 
-/* FILE STORAGE */
-const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, "public/assets");
-  },
-  filename: function (req, file, cb) {
-    cb(null, file.originalname);
-  },
-});
-
-const upload = multer({ storage });
+// routes
+fastify.register(registerAuth, { prefix: "/auth" });
 
 (async () => {
   try {
