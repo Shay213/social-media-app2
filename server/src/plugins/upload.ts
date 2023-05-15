@@ -7,6 +7,7 @@ import multer from "fastify-multer";
 
 // routes
 import { registerRoute } from "../routes/auth";
+import { createPostRoute } from "../routes/posts";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -35,6 +36,7 @@ const pluginCallback: FastifyPluginCallback = (fastify, options, done) => {
     });
 
     childFastify.register(registerRoute, { prefix: "/api/auth" });
+    childFastify.register(createPostRoute, { prefix: "/api/posts" });
     done();
   });
   done();

@@ -1,8 +1,10 @@
 import fp from "fastify-plugin";
 import { FastifyPluginAsync } from "fastify";
+import jwtVerification from "../utils/jwtVerification";
 
 // routes
 import users from "../routes/users";
+import posts from "../routes/posts";
 
 declare module "fastify" {
   interface FastifyRequest {
@@ -13,14 +15,9 @@ declare module "fastify" {
 const verifyToken: FastifyPluginAsync = fp(async (fastify, options) => {
   fastify.register(function verifiedRoutes(childFastify, opts, done) {
     childFastify.register(users, { prefix: "/api/users" });
+    childFastify.register(posts, { prefix: "/api/posts" });
 
-    childFastify.addHook("onRequest", (req, reply, done) => {
-      const token = req.cookies.token;
-      if (!token) return req.server.handleErr(reply, "Not authenticated!", 400);
-      const verified = req.server.jwt.verify(token);
-      req.payload = verified;
-      done();
-    });
+    childFastify.addHook("onRequest", jwtVerification);
     done();
   });
 });
