@@ -49,3 +49,13 @@ export const login: RouteHandler<{ Body: LoginBody }> = async (req, reply) => {
     return req.server.handleErr(reply, error.message, 500);
   }
 };
+
+export const logout: RouteHandler = async (req, reply) => {
+  const token = req.cookies.token;
+  if (token) {
+    reply.clearCookie("token");
+    return reply.code(200).send("User logged out successfully.");
+  } else {
+    return reply.code(500).send("There is no token!");
+  }
+};

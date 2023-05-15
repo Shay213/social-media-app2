@@ -6,7 +6,7 @@ import fastifyStatic from "@fastify/static";
 import multer from "fastify-multer";
 
 // routes
-import auth from "../routes/auth/index.ts";
+import { registerRoute } from "../routes/auth";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -34,7 +34,7 @@ const pluginCallback: FastifyPluginCallback = (fastify, options, done) => {
       done();
     });
 
-    childFastify.register(auth, { prefix: "/api/auth" });
+    childFastify.register(registerRoute, { prefix: "/api/auth" });
     done();
   });
   done();

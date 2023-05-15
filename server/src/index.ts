@@ -11,6 +11,9 @@ import handleErr from "./plugins/handleErr.ts";
 import verifyToken from "./plugins/verifyToken.ts";
 import upload from "./plugins/upload";
 
+// ROUTES
+import auth from "./routes/auth/index.ts";
+
 // UTILS
 import getJwtSecret from "./utils/getJwtSecret.ts";
 
@@ -36,6 +39,9 @@ fastify.register(handleErr);
 // GLOBAL SCHEMAS
 fastify.addSchema(userSchema);
 fastify.addSchema(errorReplySchema);
+
+//ROUTES
+fastify.register(auth, { prefix: "/api/auth" });
 
 // ROUTES WITH FILES
 fastify.register(upload);
