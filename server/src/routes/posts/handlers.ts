@@ -5,7 +5,14 @@ import { promisify } from "util";
 
 const promiseJwtVerification = promisify(jwtVerification);
 
-export const getFeedPosts: RouteHandler = async (req, reply) => {};
+export const getFeedPosts: RouteHandler = async (req, reply) => {
+  try {
+    const posts = await req.server.prisma.post.findMany();
+    return reply.code(200).send(posts);
+  } catch (error: any) {
+    return req.server.handleErr(reply, error.message, 500);
+  }
+};
 
 export const getUserPosts: RouteHandler = async (req, reply) => {};
 
@@ -18,7 +25,7 @@ export const createPost: RouteHandler<{ Body: CreatePostBody }> = async (
   await promiseJwtVerification(req, reply);
   const { userId, description, picturePath } = req.body;
   try {
-    const post = await req.server.prisma.post.create({
+    await req.server.prisma.post.create({
       data: {
         description,
         picturePath,
@@ -37,7 +44,8 @@ export const createPost: RouteHandler<{ Body: CreatePostBody }> = async (
         },
       },
     });
-    return reply.code(201).send(post);
+    const posts = await req.server.prisma.post.findMany();
+    return reply.code(201).send(posts);
   } catch (error: any) {
     return req.server.handleErr(reply, error.message, 500);
   }
