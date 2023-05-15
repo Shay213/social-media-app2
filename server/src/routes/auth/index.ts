@@ -1,4 +1,4 @@
-import fastify, { FastifyInstance } from "fastify";
+import { FastifyInstance } from "fastify";
 import { register, login, logout } from "./handlers.ts";
 import { registerSchema, loginSchema } from "./schemas.ts";
 

@@ -32,6 +32,42 @@ export const getUserSchema: FastifySchema = {
   },
 };
 
-export const getUserFriendsSchema: FastifySchema = {};
+const getUserFriendsSuccessReply = {
+  type: "array",
+  items: {
+    type: "object",
+    properties: {
+      id: { type: "string" },
+      firstName: { type: "string" },
+      lastName: { type: "string" },
+      occupation: { type: "string" },
+      location: { type: "string" },
+      picturePath: { type: "string" },
+      userId: { type: "string" },
+    },
+    required: [
+      "id",
+      "firstName",
+      "lastName",
+      "occupation",
+      "location",
+      "picturePath",
+      "userId",
+    ],
+  },
+  additionalProperties: false,
+};
+
+export const getUserFriendsSchema: FastifySchema = {
+  params: {
+    ...getUserParams,
+  },
+  response: {
+    200: {
+      ...getUserFriendsSuccessReply,
+    },
+    500: { $ref: "error#" },
+  },
+};
 
 export const addRemoveFriendSchema: FastifySchema = {};

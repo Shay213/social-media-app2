@@ -18,6 +18,22 @@ export const getUser: RouteHandler<{ Params: getUserParams }> = async (
   }
 };
 
-export const getUserFriends: RouteHandler = async (req, reply) => {};
+export const getUserFriends: RouteHandler<{ Params: getUserParams }> = async (
+  req,
+  reply
+) => {
+  const { id } = req.params;
+
+  try {
+    const friends = req.server.prisma.friend.findMany({
+      where: {
+        user: { id },
+      },
+    });
+    return reply.code(200).send(friends);
+  } catch (error: any) {
+    return req.server.handleErr(reply, error.message, 500);
+  }
+};
 
 export const addRemoveFriend: RouteHandler = async (req, reply) => {};

@@ -29,13 +29,14 @@ model User {
 }
 
 model Friend {
-  id         String  @id @default(uuid())
-  firstName  String  @map("first_name")
-  lastName   String  @map("last_name")
-  occupation String? @default("")
-  location   String? @default("")
-  userId     String  @map("user_id")
-  user       User    @relation(fields: [userId], references: [id])
+  id          String  @id @default(uuid())
+  firstName   String  @map("first_name")
+  lastName    String  @map("last_name")
+  occupation  String? @default("")
+  location    String? @default("")
+  picturePath String? @default("") @map("picture_path")
+  userId      String  @map("user_id")
+  user        User    @relation(fields: [userId], references: [id])
 
   @@map("friends")
 }
