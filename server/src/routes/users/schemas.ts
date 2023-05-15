@@ -54,8 +54,8 @@ const getUserFriendsSuccessReply = {
       "picturePath",
       "userId",
     ],
+    additionalProperties: false,
   },
-  additionalProperties: false,
 };
 
 export const getUserFriendsSchema: FastifySchema = {
@@ -70,4 +70,26 @@ export const getUserFriendsSchema: FastifySchema = {
   },
 };
 
-export const addRemoveFriendSchema: FastifySchema = {};
+const addRemoveFriendParams = {
+  type: "object",
+  properties: {
+    id: { type: "string" },
+    friendId: { type: "string" },
+  },
+  required: ["id", "friendId"],
+} as const;
+
+export type AddRemoveFriendParams = FromSchema<typeof addRemoveFriendParams>;
+
+export const addRemoveFriendSchema: FastifySchema = {
+  params: {
+    ...addRemoveFriendParams,
+  },
+  response: {
+    200: {
+      ...getUserFriendsSuccessReply,
+    },
+    404: { $ref: "error#" },
+    500: { $ref: "error#" },
+  },
+};
