@@ -11,7 +11,6 @@ import {
   likePostSchema,
   createPostSchema,
 } from "./schemas.ts";
-import jwtVerification from "../../utils/jwtVerification.ts";
 
 export default async (fastify: FastifyInstance) => {
   fastify.get("/", { schema: getFeedPostsSchema }, getFeedPosts);
@@ -20,9 +19,5 @@ export default async (fastify: FastifyInstance) => {
 };
 
 export const createPostRoute = async (fastify: FastifyInstance) => {
-  fastify.post(
-    "/",
-    { onRequest: jwtVerification, schema: createPostSchema },
-    createPost
-  );
+  fastify.post("/", { schema: createPostSchema }, createPost);
 };
