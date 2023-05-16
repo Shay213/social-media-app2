@@ -1,7 +1,6 @@
 import * as dotenv from "dotenv";
 import Fastify from "fastify";
 import fastifyCors from "@fastify/cors";
-import fastifyHelmet from "@fastify/helmet";
 import fastifyJwt from "@fastify/jwt";
 import fastifyCookie from "@fastify/cookie";
 
@@ -23,11 +22,11 @@ import { userSchema, errorReplySchema } from "./routes/auth/schemas.ts";
 dotenv.config();
 
 const fastify = Fastify({ logger: true });
-await fastify.register(fastifyCors);
-
-fastify.register(fastifyHelmet, {
-  crossOriginResourcePolicy: { policy: "cross-origin" },
+await fastify.register(fastifyCors, {
+  origin: "http://localhost:5137",
+  credentials: true,
 });
+
 fastify.register(prismaPlugin);
 fastify.register(fastifyCookie);
 fastify.register(fastifyJwt, {

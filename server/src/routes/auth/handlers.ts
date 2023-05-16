@@ -53,7 +53,7 @@ export const login: RouteHandler<{ Body: LoginBody }> = async (req, reply) => {
         httpOnly: true,
       })
       .code(200)
-      .send({ user });
+      .send({ user: rest, token });
   } catch (error: any) {
     return req.server.handleErr(reply, error.message, 500);
   }

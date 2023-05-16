@@ -105,8 +105,9 @@ const loginSchemaSuccessReply = {
         "createdAt",
       ],
     },
+    token: { type: "string" },
   },
-  required: ["user"],
+  required: ["user", "token"],
   additionalProperties: false,
 };
 

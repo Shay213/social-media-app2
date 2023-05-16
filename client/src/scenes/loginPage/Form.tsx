@@ -95,10 +95,11 @@ const Form = () => {
     try {
       const res = await axios.post(
         'http://localhost:8800/api/auth/login',
-        data
+        data,
+        { withCredentials: true }
       );
       onSubmitProps.resetForm();
-      dispatch(setLogin({ user: res.data }));
+      dispatch(setLogin({ user: res.data.user, token: res.data.token }));
       navigate('/home');
     } catch (error) {
       console.log(error);
