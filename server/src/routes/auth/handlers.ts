@@ -1,17 +1,26 @@
 import bycrypt from "bcrypt";
 import { RouteHandler } from "fastify";
-import type { RegisterBody, LoginBody } from "./schemas.ts";
+import type { LoginBody } from "./schemas.ts";
 
-export const register: RouteHandler<{ Body: RegisterBody }> = async (
-  req,
-  reply
-) => {
+interface RegisterBody {
+  firstName: string;
+  lastName: string;
+  email: string;
+  password: string;
+  picturePath?: string;
+  location?: string;
+  occupation?: string;
+}
+
+export const register: RouteHandler = async (req, reply) => {
+  console.log(req.body);
+  const body = req.body as RegisterBody;
   try {
     const salt = await bycrypt.genSalt();
-    const passwordHash = await bycrypt.hash(req.body.password, salt);
+    const passwordHash = await bycrypt.hash(body.password, salt);
     const user = await req.server.prisma.user.create({
       data: {
-        ...req.body,
+        ...body,
         password: passwordHash,
         viewedProfile: Math.floor(Math.random() * 10000),
         impressions: Math.floor(Math.random() * 10000),

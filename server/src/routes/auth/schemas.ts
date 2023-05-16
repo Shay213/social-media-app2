@@ -39,18 +39,17 @@ export const userSchema = {
 const registerBodySchema = {
   type: "object",
   properties: {
-    firstName: { type: "string" },
-    lastName: { type: "string" },
-    email: { type: "string" },
-    password: { type: "string" },
-    picturePath: { type: "string" },
-    location: { type: "string" },
-    occupation: { type: "string" },
+    firstName: { type: "object", properties: { value: { type: "string" } } },
+    lastName: { type: "object", properties: { value: { type: "string" } } },
+    email: { type: "object", properties: { value: { type: "string" } } },
+    password: { type: "object", properties: { value: { type: "string" } } },
+    picturePath: { type: "object", properties: { value: { type: "string" } } },
+    location: { type: "object", properties: { value: { type: "string" } } },
+    occupation: { type: "object", properties: { value: { type: "string" } } },
   },
   required: ["firstName", "lastName", "email", "password"],
-} as const;
-
-export type RegisterBody = FromSchema<typeof registerBodySchema>;
+  additionalProperties: true,
+};
 
 const registerSchemaSuccessReply = {
   type: "object",
