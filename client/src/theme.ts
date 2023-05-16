@@ -1,8 +1,4 @@
-import { ThemeOptions, PaletteMode, TypeBackground } from '@mui/material';
-
-type CustomTypeBackground = TypeBackground & {
-  alt: string;
-};
+import { PaletteMode } from '@mui/material';
 
 // color design tokens export
 export const colorTokens = {
@@ -36,7 +32,7 @@ export const colorTokens = {
 };
 
 // mui theme settings
-export const themeSettings = (mode: PaletteMode): ThemeOptions => {
+export const themeSettings = (mode: PaletteMode) => {
   return {
     palette: {
       mode: mode,
@@ -58,7 +54,7 @@ export const themeSettings = (mode: PaletteMode): ThemeOptions => {
             background: {
               default: colorTokens.grey[900],
               alt: colorTokens.grey[800],
-            } as CustomTypeBackground,
+            },
           }
         : {
             // palette values for light mode
@@ -77,7 +73,7 @@ export const themeSettings = (mode: PaletteMode): ThemeOptions => {
             background: {
               default: colorTokens.grey[10],
               alt: colorTokens.grey[0],
-            } as CustomTypeBackground,
+            },
           }),
     },
     typography: {
