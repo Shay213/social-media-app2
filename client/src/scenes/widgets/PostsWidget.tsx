@@ -58,12 +58,9 @@ const PostsWidget = ({
   };
   const getUserPosts = async () => {
     try {
-      const res = await axios.get(
-        `http://localhost:8800/api/posts/${userId}/posts`,
-        {
-          withCredentials: true,
-        }
-      );
+      const res = await axios.get(`http://localhost:8800/api/posts/${userId}`, {
+        withCredentials: true,
+      });
       dispatch(setPosts({ posts: res.data }));
     } catch (error) {
       console.log(error);

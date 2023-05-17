@@ -14,29 +14,36 @@ interface Props {
   userPicturePath: string;
 }
 
+interface IFriend {
+  id: string;
+  firstName: string;
+  lastName: string;
+  location: string;
+  occupation: string;
+  picturePath: string;
+  userId: string;
+}
+
+const axiosInst = axios.create({ withCredentials: true });
+
 const Friend = ({ friendId, name, subtitle, userPicturePath }: Props) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { id } = useSelector((state) => state.user);
   const friends = useSelector((state) => state.user.friends);
-
+  console.log(friendId);
   const { palette } = useTheme();
   const primaryLight = palette.primary.light;
   const primaryDark = palette.primary.dark;
   const main = palette.neutral.main;
   const medium = palette.neutral.medium;
 
-  const isFriend = friends.find((friend) => friend.id === friendId);
-
-  const config = {
-    withCredentials: true,
-  };
+  const isFriend = friends.find((friend: IFriend) => friend.id === friendId);
 
   const patchFriend = async () => {
     try {
-      const res = await axios.patch(
-        `http://localhost:8800/${id}/${friendId}`,
-        config
+      const res = await axiosInst.patch(
+        `http://localhost:8800/api/users/${id}/${friendId}`
       );
       dispatch(setFriends({ friends: res.data }));
     } catch (error) {
@@ -69,16 +76,18 @@ const Friend = ({ friendId, name, subtitle, userPicturePath }: Props) => {
           </Typography>
         </Box>
       </FlexBetween>
-      <IconButton
-        onClick={() => patchFriend()}
-        sx={{ backgroundColor: primaryLight, p: '0.6rem' }}
-      >
-        {isFriend ? (
-          <PersonRemoveOutlined sx={{ color: primaryDark }} />
-        ) : (
-          <PersonAddOutlined sx={{ color: primaryDark }} />
-        )}
-      </IconButton>
+      {friendId !== id && (
+        <IconButton
+          onClick={() => patchFriend()}
+          sx={{ backgroundColor: primaryLight, p: '0.6rem' }}
+        >
+          {isFriend ? (
+            <PersonRemoveOutlined sx={{ color: primaryDark }} />
+          ) : (
+            <PersonAddOutlined sx={{ color: primaryDark }} />
+          )}
+        </IconButton>
+      )}
     </FlexBetween>
   );
 };

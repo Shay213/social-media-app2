@@ -53,21 +53,13 @@ export const addRemoveFriend: RouteHandler<{
     const user = await req.server.prisma.user.findUnique({
       where: { id },
       include: {
-        friends: {
-          where: {
-            id: friendId + id,
-          },
-        },
+        friends: { where: { id: friendId } },
       },
     });
     const friend = await req.server.prisma.user.findUnique({
       where: { id: friendId },
       include: {
-        friends: {
-          where: {
-            id: id + friendId,
-          },
-        },
+        friends: { where: { id } },
       },
     });
 
@@ -76,40 +68,34 @@ export const addRemoveFriend: RouteHandler<{
 
     if (!user?.friends.length) {
       // CREATE FRIEND RECORDS FOR BOTH USERS
-      await req.server.prisma.user.update({
-        where: { id },
+      await req.server.prisma.friend.create({
         data: {
-          friends: {
-            create: {
-              id: friendId + id,
-              firstName: friend.firstName,
-              lastName: friend.lastName,
-              location: friend.location,
-              occupation: friend.occupation,
-            },
-          },
+          id: friendId,
+          firstName: friend.firstName,
+          lastName: friend.lastName,
+          location: friend.location,
+          occupation: friend.occupation,
+          picturePath: friend.picturePath,
+          user: { connect: { id } },
         },
       });
-      await req.server.prisma.user.update({
-        where: { id: friendId },
+      await req.server.prisma.friend.create({
         data: {
-          friends: {
-            create: {
-              id: id + friendId,
-              firstName: user.firstName,
-              lastName: user.lastName,
-              location: user.location,
-              occupation: user.occupation,
-            },
-          },
+          id,
+          firstName: user.firstName,
+          lastName: user.lastName,
+          location: user.location,
+          occupation: user.occupation,
+          picturePath: user.picturePath,
+          user: { connect: { id: friendId } },
         },
       });
     } else {
       await req.server.prisma.friend.delete({
-        where: { id: id + friendId },
+        where: { id },
       });
       await req.server.prisma.friend.delete({
-        where: { id: friendId + id },
+        where: { id: friendId },
       });
     }
 

@@ -16,15 +16,16 @@ interface IFriend {
   userId: string;
 }
 
+const axiosInst = axios.create({ withCredentials: true });
+
 const FriendListWidget = ({ userId }: { userId: string }) => {
   const dispatch = useDispatch();
   const { palette } = useTheme();
   const friends = useSelector((state) => state.user.friends);
 
   const getFriends = async () => {
-    const res = await axios.get(
-      `http://localhost:8800/api/users/${userId}/friends`,
-      { withCredentials: true }
+    const res = await axiosInst.get(
+      `http://localhost:8800/api/users/${userId}/friends`
     );
     dispatch(setFriends({ friends: res.data }));
   };
@@ -32,7 +33,7 @@ const FriendListWidget = ({ userId }: { userId: string }) => {
   useEffect(() => {
     getFriends();
   }, []);
-
+  console.log(friends);
   return (
     <WidgetWrapper>
       <Typography
