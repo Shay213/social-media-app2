@@ -31,7 +31,7 @@ export const getFeedPosts: RouteHandler = async (req, reply) => {
           },
         },
       },
-      orderBy: { createdAt: "asc" },
+      orderBy: { createdAt: "desc" },
     });
     return reply.code(200).send(posts);
   } catch (error: any) {
@@ -76,14 +76,13 @@ export const likePost: RouteHandler<{
   const { id } = req.params;
   const { userId } = req.body;
   try {
-    const isLiked = await req.server.prisma.post.findFirst({
+    const isLiked = await req.server.prisma.like.findFirst({
       where: {
         AND: {
-          id,
-          likes: { some: { users: { some: { id: userId } } } },
+          postId: id,
+          userId,
         },
       },
-      include: { likes: { where: { userId } } },
     });
 
     let updatedPost;
@@ -91,7 +90,7 @@ export const likePost: RouteHandler<{
       updatedPost = await req.server.prisma.post.update({
         where: { id },
         data: {
-          likes: { delete: { id: isLiked.likes[0].id } },
+          likes: { delete: { id: isLiked.id } },
         },
         include: {
           comments: true,
@@ -111,7 +110,7 @@ export const likePost: RouteHandler<{
       updatedPost = await req.server.prisma.post.update({
         where: { id },
         data: {
-          likes: { create: { userId, postId: id } },
+          likes: { create: { postId: id, userId } },
         },
         include: {
           comments: true,
@@ -162,7 +161,7 @@ export const createPost: RouteHandler<{ Body: CreatePostBody }> = async (
           },
         },
       },
-      orderBy: { createdAt: "asc" },
+      orderBy: { createdAt: "desc" },
     });
     return reply.code(201).send(posts);
   } catch (error: any) {

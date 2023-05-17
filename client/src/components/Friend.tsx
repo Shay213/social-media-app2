@@ -31,7 +31,6 @@ const Friend = ({ friendId, name, subtitle, userPicturePath }: Props) => {
   const navigate = useNavigate();
   const { id } = useSelector((state) => state.user);
   const friends = useSelector((state) => state.user.friends);
-  console.log(friendId);
   const { palette } = useTheme();
   const primaryLight = palette.primary.light;
   const primaryDark = palette.primary.dark;

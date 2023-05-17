@@ -32,7 +32,7 @@ const PostWidget = ({ post }: { post: Post }) => {
   const patchLike = async () => {
     try {
       const res = await axios.patch(
-        `http://localhost:8800/posts/${post.id}/like`,
+        `http://localhost:8800/api/posts/${post.id}/like`,
         { userId: loggedInUserId },
         config
       );
@@ -41,7 +41,6 @@ const PostWidget = ({ post }: { post: Post }) => {
       console.log(error);
     }
   };
-
   return (
     <WidgetWrapper m='2rem 0'>
       <Friend
