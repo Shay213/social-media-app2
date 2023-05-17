@@ -4,8 +4,8 @@ import type {
   GetUserPostsParams,
   LikePostBody,
   LikePostParams,
-} from "./schemas.ts";
-import jwtVerification from "../../utils/jwtVerification.ts";
+} from "./schemas";
+import jwtVerification from "../../utils/jwtVerification";
 import { promisify } from "util";
 
 const promiseJwtVerification = promisify(jwtVerification);

@@ -1,16 +1,11 @@
 import { FastifyInstance } from "fastify";
-import {
-  getFeedPosts,
-  getUserPosts,
-  likePost,
-  createPost,
-} from "./handlers.ts";
+import { getFeedPosts, getUserPosts, likePost, createPost } from "./handlers";
 import {
   getFeedPostsSchema,
   getUserPostsSchema,
   likePostSchema,
   createPostSchema,
-} from "./schemas.ts";
+} from "./schemas";
 
 export default async (fastify: FastifyInstance) => {
   fastify.get("/", { schema: getFeedPostsSchema }, getFeedPosts);

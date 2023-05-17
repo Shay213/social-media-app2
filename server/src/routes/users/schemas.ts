@@ -5,8 +5,9 @@ const getUserSuccessReply = {
   type: "object",
   properties: {
     user: { $ref: "user#" },
+    friendsCount: { type: "number" },
   },
-  required: ["user"],
+  required: ["user", "friendsCount"],
   additionalProperties: false,
 };
 

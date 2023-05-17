@@ -42,11 +42,12 @@ interface Body {
 }
 
 const pluginCallback: FastifyPluginCallback = (fastify, options, done) => {
-  fastify.register(function filesRoutes(childFastify, opts, done) {
-    childFastify.register(fastifyStatic, {
-      root: path.join(grandparentDir, "/public/assets"),
-    });
+  fastify.register(fastifyStatic, {
+    root: path.join(grandparentDir, "/public/assets"),
+    prefix: "/images/",
+  });
 
+  fastify.register(function filesRoutes(childFastify, opts, done) {
     async function onFile(part: any) {
       const filePath = path.join(
         grandparentDir,
@@ -79,7 +80,7 @@ const pluginCallback: FastifyPluginCallback = (fastify, options, done) => {
         lastName: lastName.value,
         email: email.value,
         password: password.value,
-        picturePath: `${grandparentDir}/public/assets/${picturePath.value}`,
+        picturePath: `/images/${picturePath.value}`,
         location: location.value,
         occupation: occupation.value,
       };

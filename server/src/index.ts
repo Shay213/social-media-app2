@@ -6,18 +6,18 @@ import fastifyCookie from "@fastify/cookie";
 
 // CUSTOM PLUGINS
 import prismaPlugin from "./plugins/prisma";
-import handleErr from "./plugins/handleErr.ts";
-import verifyToken from "./plugins/verifyToken.ts";
+import handleErr from "./plugins/handleErr";
+import verifyToken from "./plugins/verifyToken";
 import upload from "./plugins/upload";
 
 // ROUTES
-import auth from "./routes/auth/index.ts";
+import auth from "./routes/auth/index";
 
 // UTILS
-import getJwtSecret from "./utils/getJwtSecret.ts";
+import getJwtSecret from "./utils/getJwtSecret";
 
 // GLOBAL SCHEMAS
-import { userSchema, errorReplySchema } from "./routes/auth/schemas.ts";
+import { userSchema, errorReplySchema } from "./routes/auth/schemas";
 
 dotenv.config();
 

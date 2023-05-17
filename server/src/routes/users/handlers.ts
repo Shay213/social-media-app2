@@ -1,5 +1,5 @@
 import { RouteHandler } from "fastify";
-import type { getUserParams, AddRemoveFriendParams } from "./schemas.ts";
+import type { getUserParams, AddRemoveFriendParams } from "./schemas";
 
 export const getUser: RouteHandler<{ Params: getUserParams }> = async (
   req,
@@ -11,8 +11,13 @@ export const getUser: RouteHandler<{ Params: getUserParams }> = async (
       where: {
         id,
       },
+      include: {
+        _count: { select: { friends: true } },
+      },
     });
-    return reply.code(200).send({ user });
+    return reply
+      .code(200)
+      .send({ user, friendsCount: user?._count.friends ?? 0 });
   } catch (error: any) {
     return req.server.handleErr(reply, error.message, 500);
   }

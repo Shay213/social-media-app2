@@ -1,6 +1,6 @@
 import bycrypt from "bcrypt";
 import { RouteHandler } from "fastify";
-import type { LoginBody } from "./schemas.ts";
+import type { LoginBody } from "./schemas";
 
 interface RegisterBody {
   firstName: string;
