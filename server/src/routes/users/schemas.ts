@@ -21,19 +21,7 @@ const getUserParams = {
 
 export type getUserParams = FromSchema<typeof getUserParams>;
 
-export const getUserSchema: FastifySchema = {
-  params: {
-    ...getUserParams,
-  },
-  response: {
-    200: {
-      ...getUserSuccessReply,
-    },
-    500: { $ref: "error#" },
-  },
-};
-
-const getUserFriendsSuccessReply = {
+export const getUserFriendsSuccessReply = {
   type: "array",
   items: {
     type: "object",
@@ -56,6 +44,18 @@ const getUserFriendsSuccessReply = {
       "userId",
     ],
     additionalProperties: false,
+  },
+};
+
+export const getUserSchema: FastifySchema = {
+  params: {
+    ...getUserParams,
+  },
+  response: {
+    200: {
+      ...getUserSuccessReply,
+    },
+    500: { $ref: "error#" },
   },
 };
 

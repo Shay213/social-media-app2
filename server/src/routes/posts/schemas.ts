@@ -13,11 +13,12 @@ const post = {
       type: "object",
       properties: {
         picturePath: { type: ["string", "null"], nullable: true },
+        id: { type: "string" },
         firstName: { type: "string" },
         lastName: { type: "string" },
         location: { type: ["string", "null"], nullable: true },
       },
-      required: ["picturePath", "firstName", "lastName", "location"],
+      required: ["picturePath", "firstName", "lastName", "location", "id"],
     },
     likes: {
       type: "array",

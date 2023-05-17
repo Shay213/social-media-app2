@@ -1,5 +1,6 @@
 import type { FastifySchema } from "fastify";
 import { FromSchema } from "json-schema-to-ts";
+import { getUserFriendsSuccessReply } from "../users/schemas";
 
 const userSchemaProperties = {
   id: { type: "string" },
@@ -90,7 +91,10 @@ const loginSchemaSuccessReply = {
   properties: {
     user: {
       type: "object",
-      properties: loginSchemaProperties,
+      properties: {
+        ...loginSchemaProperties,
+        friends: getUserFriendsSuccessReply,
+      },
       required: [
         "id",
         "firstName",

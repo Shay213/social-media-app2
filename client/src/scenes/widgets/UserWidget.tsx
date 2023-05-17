@@ -25,7 +25,6 @@ const UserWidget = ({
   const [user, setUser] = useState(null);
   const { palette } = useTheme();
   const navigate = useNavigate();
-  const token = useSelector((state) => state.token);
   const dark = palette.neutral.dark;
   const medium = palette.neutral.medium;
   const main = palette.neutral.main;
@@ -35,7 +34,11 @@ const UserWidget = ({
       const res = await axios.get(`http://localhost:8800/api/users/${userId}`, {
         withCredentials: true,
       });
-      setUser({ ...res.data.user, friendsCount: res.data.friendsCount });
+      const user = {
+        ...res.data.user,
+        friendsCount: res.data.friendsCount,
+      };
+      setUser(user);
     } catch (error) {
       console.log(error);
     }

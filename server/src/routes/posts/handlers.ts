@@ -23,6 +23,7 @@ export const getFeedPosts: RouteHandler = async (req, reply) => {
         likes: true,
         user: {
           select: {
+            id: true,
             firstName: true,
             lastName: true,
             location: true,
@@ -30,6 +31,7 @@ export const getFeedPosts: RouteHandler = async (req, reply) => {
           },
         },
       },
+      orderBy: { createdAt: "asc" },
     });
     return reply.code(200).send(posts);
   } catch (error: any) {
@@ -51,6 +53,7 @@ export const getUserPosts: RouteHandler<{
         likes: true,
         user: {
           select: {
+            id: true,
             firstName: true,
             lastName: true,
             location: true,
@@ -58,6 +61,7 @@ export const getUserPosts: RouteHandler<{
           },
         },
       },
+      orderBy: { createdAt: "asc" },
     });
     return reply.code(200).send(posts);
   } catch (error: any) {
@@ -94,6 +98,7 @@ export const likePost: RouteHandler<{
           likes: true,
           user: {
             select: {
+              id: true,
               firstName: true,
               lastName: true,
               location: true,
@@ -113,6 +118,7 @@ export const likePost: RouteHandler<{
           likes: true,
           user: {
             select: {
+              id: true,
               firstName: true,
               lastName: true,
               location: true,
@@ -148,6 +154,7 @@ export const createPost: RouteHandler<{ Body: CreatePostBody }> = async (
         likes: true,
         user: {
           select: {
+            id: true,
             firstName: true,
             lastName: true,
             location: true,
@@ -155,6 +162,7 @@ export const createPost: RouteHandler<{ Body: CreatePostBody }> = async (
           },
         },
       },
+      orderBy: { createdAt: "asc" },
     });
     return reply.code(201).send(posts);
   } catch (error: any) {

@@ -37,6 +37,7 @@ export const login: RouteHandler<{ Body: LoginBody }> = async (req, reply) => {
   try {
     const user = await req.server.prisma.user.findUnique({
       where: { email },
+      include: { friends: true },
     });
     if (!user) return req.server.handleErr(reply, "User does not exist!", 400);
 

@@ -15,9 +15,10 @@ export const getUser: RouteHandler<{ Params: getUserParams }> = async (
         _count: { select: { friends: true } },
       },
     });
-    return reply
-      .code(200)
-      .send({ user, friendsCount: user?._count.friends ?? 0 });
+    return reply.code(200).send({
+      user,
+      friendsCount: user?._count.friends ?? 0,
+    });
   } catch (error: any) {
     return req.server.handleErr(reply, error.message, 500);
   }
