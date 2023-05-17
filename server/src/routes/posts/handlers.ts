@@ -61,7 +61,7 @@ export const getUserPosts: RouteHandler<{
           },
         },
       },
-      orderBy: { createdAt: "asc" },
+      orderBy: { createdAt: "desc" },
     });
     return reply.code(200).send(posts);
   } catch (error: any) {
