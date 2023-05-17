@@ -17,7 +17,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const grandparentDir = path.resolve(__dirname, "..", "..");
 
-interface Body {
+interface RegisterBody {
   firstName: {
     value: string;
   };
@@ -37,6 +37,17 @@ interface Body {
     value: string;
   };
   occupation: {
+    value: string;
+  };
+}
+interface PostBody {
+  userId: {
+    value: string;
+  };
+  description: {
+    value: string;
+  };
+  picturePath?: {
     value: string;
   };
 }
@@ -65,25 +76,39 @@ const pluginCallback: FastifyPluginCallback = (fastify, options, done) => {
     childFastify.register(registerRoute, { prefix: "/api/auth" });
     childFastify.register(createPostRoute, { prefix: "/api/posts" });
 
-    childFastify.addHook("preHandler", async (req, reply) => {
-      const {
-        firstName,
-        lastName,
-        email,
-        password,
-        picturePath,
-        location,
-        occupation,
-      } = req.body as Body;
-      req.body = {
-        firstName: firstName.value,
-        lastName: lastName.value,
-        email: email.value,
-        password: password.value,
-        picturePath: `/images/${picturePath.value}`,
-        location: location.value,
-        occupation: occupation.value,
-      };
+    childFastify.addHook("preHandler", (req, reply, done) => {
+      if (req.url === "/api/auth/register") {
+        const {
+          firstName,
+          lastName,
+          email,
+          password,
+          picturePath,
+          location,
+          occupation,
+        } = req.body as RegisterBody;
+        req.body = {
+          firstName: firstName.value,
+          lastName: lastName.value,
+          email: email.value,
+          password: password.value,
+          picturePath: picturePath?.value
+            ? `/images/${picturePath.value}`
+            : null,
+          location: location.value,
+          occupation: occupation.value,
+        };
+      } else if (req.url === "/api/posts") {
+        const { userId, description, picturePath } = req.body as PostBody;
+        req.body = {
+          userId: userId.value,
+          description: description.value,
+          picturePath: picturePath?.value
+            ? `/images/${picturePath.value}`
+            : null,
+        };
+      }
+      done();
     });
 
     done();

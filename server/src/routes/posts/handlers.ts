@@ -1,6 +1,5 @@
 import { RouteHandler } from "fastify";
 import type {
-  CreatePostBody,
   GetUserPostsParams,
   LikePostBody,
   LikePostParams,
@@ -9,6 +8,12 @@ import jwtVerification from "../../utils/jwtVerification";
 import { promisify } from "util";
 
 const promiseJwtVerification = promisify(jwtVerification);
+
+interface CreatePostBody {
+  userId: string;
+  description: string;
+  picturePath?: string | null;
+}
 
 export const getFeedPosts: RouteHandler = async (req, reply) => {
   try {

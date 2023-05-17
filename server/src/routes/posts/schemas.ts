@@ -131,14 +131,13 @@ export const likePostSchema: FastifySchema = {
 const createPostBody = {
   type: "object",
   properties: {
-    userId: { type: "string" },
-    description: { type: "string" },
-    picturePath: { type: "string" },
+    userId: { type: "object", properties: { value: { type: "string" } } },
+    description: { type: "object", properties: { value: { type: "string" } } },
+    picturePath: { type: "object", properties: { value: { type: "string" } } },
   },
   required: ["userId", "description"],
-} as const;
-
-export type CreatePostBody = FromSchema<typeof createPostBody>;
+  additionalProperties: true,
+};
 
 export const createPostSchema: FastifySchema = {
   body: createPostBody,
